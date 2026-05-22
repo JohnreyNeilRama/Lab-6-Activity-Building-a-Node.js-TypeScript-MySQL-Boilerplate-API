@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc && node -e \"const fs = require('fs'); fs.mkdirSync('dist', { recursive: true }); fs.copyFileSync('swagger.yaml', 'dist/swagger.yaml'); fs.mkdirSync('dist/_helpers', { recursive: true }); fs.copyFileSync('swagger.yaml', 'dist/_helpers/swagger.yaml');\"",
+    "build": "tsc && node copy-swagger.js",
     "start:dev": "nodemon --exec ts-node ./server.ts"
   },
   "keywords": [],

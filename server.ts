@@ -8,6 +8,9 @@ import swaggerDocs from './_helpers/swagger';
 
 const app = express();
 
+// Trust proxy headers for secure cookies and correct protocol/redirects in production (Render)
+app.set('trust proxy', true);
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());

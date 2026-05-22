@@ -1,42 +1,23 @@
 openapi: 3.0.0
 info:
-  title: Node MySQL API
+  title: Node.js Sign-up and Verification API
+  description: 'Node.js + MySQL - API with email sign-up, verification, authentication and forgot password'
   version: 1.0.0
 servers:
   - url: https://lab-6-activity-building-a-node-js-tu44.onrender.com
-    description: Production (Render)
+    description: Production server (Render)
   - url: http://localhost:4000
-    description: Local Development
+    description: Local development server
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  schemas:
-    Account:
-      type: object
-      properties:
-        id:
-          type: integer
-        title:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        role:
-          type: string
-        created:
-          type: string
-        updated:
-          type: string
 paths:
   /accounts/authenticate:
     post:
-      summary: Authenticate account and get JWT token
+      summary: Authenticate account credentials and return a JWT token and a cookie with a refresh token
       tags: [Accounts]
       requestBody:
         required: true
@@ -48,27 +29,27 @@ paths:
               properties:
                 email:
                   type: string
-                  example: john@example.com
+                  example: jason.watmore@example.com
                 password:
                   type: string
-                  example: password123
+                  example: pass-123
       responses:
         '200':
           description: Authentication successful
         '400':
-          description: Invalid credentials
+          description: Email or password is incorrect
 
   /accounts/refresh-token:
     post:
-      summary: Refresh JWT token using cookie
+      summary: Use a refresh token to generate a new JWT token and a new refresh token
       tags: [Accounts]
       responses:
         '200':
-          description: Token refreshed
+          description: Token refreshed successfully
 
   /accounts/revoke-token:
     post:
-      summary: Revoke refresh token
+      summary: Revoke a refresh token
       tags: [Accounts]
       security:
         - bearerAuth: []
@@ -82,11 +63,11 @@ paths:
                   type: string
       responses:
         '200':
-          description: Token revoked
+          description: Token revoked successfully
 
   /accounts/register:
     post:
-      summary: Register a new account
+      summary: Register a new user account and send a verification email
       tags: [Accounts]
       requestBody:
         required: true
@@ -101,29 +82,29 @@ paths:
                   example: Mr
                 firstName:
                   type: string
-                  example: John
+                  example: Jason
                 lastName:
                   type: string
-                  example: Doe
+                  example: Watmore
                 email:
                   type: string
-                  example: john@example.com
+                  example: jason.watmore@example.com
                 password:
                   type: string
-                  example: password123
+                  example: pass-123
                 confirmPassword:
                   type: string
-                  example: password123
+                  example: pass-123
                 acceptTerms:
                   type: boolean
                   example: true
       responses:
         '200':
-          description: Registration successful, check email for verification
+          description: Registration successful, please check your email for verification instructions
 
   /accounts/verify-email:
     post:
-      summary: Verify email with token
+      summary: Verify a new account with a verification token received by email after registration
       tags: [Accounts]
       requestBody:
         required: true
@@ -137,11 +118,11 @@ paths:
                   type: string
       responses:
         '200':
-          description: Email verified successfully
+          description: Verification successful, you can now login
 
   /accounts/forgot-password:
     post:
-      summary: Submit email to receive password reset link
+      summary: Submit email address to reset the password on an account
       tags: [Accounts]
       requestBody:
         required: true
@@ -153,14 +134,14 @@ paths:
               properties:
                 email:
                   type: string
-                  example: john@example.com
+                  example: jason.watmore@example.com
       responses:
         '200':
-          description: Reset instructions sent to email
+          description: Please check your email for password reset instructions
 
   /accounts/validate-reset-token:
     post:
-      summary: Validate password reset token
+      summary: Validate the reset password token received by email after submitting to the forgot password endpoint
       tags: [Accounts]
       requestBody:
         required: true
@@ -180,7 +161,7 @@ paths:
 
   /accounts/reset-password:
     post:
-      summary: Reset password using token
+      summary: Reset the password for an account
       tags: [Accounts]
       requestBody:
         required: true
@@ -194,25 +175,25 @@ paths:
                   type: string
                 password:
                   type: string
-                  example: newpassword123
+                  example: newPass-123
                 confirmPassword:
                   type: string
-                  example: newpassword123
+                  example: newPass-123
       responses:
         '200':
-          description: Password reset successful
+          description: Password reset successful, you can now login
 
   /accounts:
     get:
-      summary: Get all accounts (Admin only)
+      summary: Get a list of all accounts (admin only)
       tags: [Accounts]
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: List of accounts
+          description: List of all accounts
     post:
-      summary: Create account (Admin only)
+      summary: Create a new account (admin only)
       tags: [Accounts]
       security:
         - bearerAuth: []
@@ -241,11 +222,11 @@ paths:
                   enum: [Admin, User]
       responses:
         '200':
-          description: Account created
+          description: Account created successfully
 
   /accounts/{id}:
     get:
-      summary: Get account by ID
+      summary: Get a single account by id
       tags: [Accounts]
       security:
         - bearerAuth: []
@@ -259,7 +240,7 @@ paths:
         '200':
           description: Account details
     put:
-      summary: Update account
+      summary: Update an account
       tags: [Accounts]
       security:
         - bearerAuth: []
@@ -287,11 +268,14 @@ paths:
                   type: string
                 confirmPassword:
                   type: string
+                role:
+                  type: string
+                  enum: [Admin, User]
       responses:
         '200':
-          description: Account updated
+          description: Account updated successfully
     delete:
-      summary: Delete account
+      summary: Delete an account
       tags: [Accounts]
       security:
         - bearerAuth: []
@@ -303,4 +287,4 @@ paths:
             type: integer
       responses:
         '200':
-          description: Account deleted
+          description: Account deleted successfully

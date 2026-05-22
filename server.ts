@@ -27,6 +27,11 @@ app.use(cors({
 // api routes
 app.use('/accounts', accountsController);
 
+// test route to verify deployments
+app.get('/test-deploy', (req, res) => {
+  res.send('Deploy success: active code version 2.0');
+});
+
 // swagger docs route
 app.use('/api-docs', swaggerDocs);
 

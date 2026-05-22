@@ -59,7 +59,6 @@ if (!swaggerDocument) {
 // Configure Swagger UI options to prevent reverse proxy asset/styling bugs
 const options = {
   customSiteTitle: "Node.js Sign-up and Verification API",
-  customCss: '.swagger-ui .topbar { display: none }',
   swaggerOptions: {
     persistAuthorization: true
   }
